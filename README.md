@@ -4,7 +4,7 @@ This is the analysis of the data from Kultra Mega Stores Inventory to gain insig
 ## Project Topic:  Kultra Mega Stores Inventory 
 
 ## About Me
-i am Umeh Evi Eseoghene a Pharmacist with experience in E-commerce and Tele-pharmacy. I am currently undergoing a training with DSA to learn and improve my skills on data tools such as Excel Power Bi and SQL. You can connect via:
+I am Umeh Evi Eseoghene a Pharmacist with experience in E-commerce and Tele-pharmacy. I am currently undergoing a training with DSA to learn and improve my skills on data tools such as Excel, Power Bi and SQL. You can connect via:
 - LinkedIn: https://www.linkedin.com/in/evi-eseoghene-6a5b35126
 - Email: umehevi@gmail.com
 
@@ -13,6 +13,7 @@ i am Umeh Evi Eseoghene a Pharmacist with experience in E-commerce and Tele-phar
 - [Data Source](#data-source)
 - [Tools Used](#tools-used)
 - [Queries](#queries)
+- [Recommendation](#recommendation)
 
 
 ### Project Overview
@@ -189,10 +190,131 @@ ORDER BY
    [customer_name], Total_spent DESC;
 ```
 #### Result
+| Customer_name     | Product_category | Purchase_count  | Total_spent        
+| ----------------  | -----------      |  -----------    |----------- |
+| Deborah Brumfield | Technology       |  8              | 76795.796  |
+| Deborah Brumfield | Furniture        |  4              | 12809.620  |
+| Deborah Brumfiel  | Office Supplies  |  8              | 7827.720   |
+| Emily Phan        | Technology       |  4              | 110481.968  |
+| Emily Phan        |  Furniture       |  1              | 4011.650   |
+| Emily Phan        | Office Supplies  |  5              | 2630.820   |
+#### Insight
+The result highlight the top selling products purchased by the most valuable customers.
 
+### Question 7
+---Q7 Which small business customer had the highest sales?
+``` sql
+SELECT TOP 1
+   customer_name,
+   SUM(sales) as total_sales
+FROM
+   KMS_SQL
+WHERE
+   customer_segment = 'small business'
+GROUP BY
+   customer_name
+ORDER BY
+   total_sales DESC;
+```
+#### Result
+| Customer_name    | Total_Sales |
+| ---------------- | ----------- | 
+|  Dennis Kane     | 75967.591
+#### Insight
+This showed the small business that generated the highest revenue.  
 
+### Question 8
+---Q8 Which corporate customer placed the most number of order in 2009-2012?
+``` sql
+SELECT TOP 1
+   customer_name,
+   COUNT(DISTINCT order_id) AS total_orders
+FROM
+   KMS_SQL
+WHERE
+   customer_segment = 'corporate'
+   AND order_date BETWEEN '2009-01-01' AND '2012-12-31'
+GROUP BY
+   customer_name
+ORDER BY
+   total_orders DESC;
+```
+#### Result
+| Customer_name    | Total_orders |
+| ---------------- | ----------- | 
+|  Adam Hart       | 18
+#### Insight
+The company should put in place reward systems for such customers to maintain loyaty and increase customers demand which will lead to more revenue
 
+### Question 9
+---Q9 Which consumer customer was the most profitable one?
+``` sql
+SELECT TOP 1
+   customer_name,
+   SUM(profit) as total_profit
+FROM
+   KMS_SQL
+WHERE
+   customer_segment = 'consumer'
+GROUP BY 
+   customer_name
+ORDER BY
+   total_profit DESC;
+```
+#### Result
+| Customer_name    | Total_profit |
+| ---------------- | -----------  | 
+| Emily Phan       | 34005.440
+#### Insight
+This will give insight into the product that the customer usually purchase to make the purchase the most prifitable
 
+### Question 10
+---Q10 Which customer returned items, and what segment do they belong?
+``` sql
+SELECT * from dbo.KMS_Sql
+SELECT * from dbo.Order_Status
+
+SELECT
+   K.customer_name,
+   k.customer_segment,
+   k.order_id,
+   o.status
+FROM
+   KMS_Sql k
+JOIN
+   order_status o ON K.order_id = o.order_id
+WHERE
+   o.status = 'Returned'
+```
+#### Result and Insight
+From the result, over 500 customers across various segment returned items. This should give insight into why there were many returns and what the company can do to reduce return rate.
+
+### Question 11
+---Q11 Company appropriately spent shipping cost based on 
+``` sql
+SELECT
+   order_priority,
+   ship_mode,
+   COUNT(*) AS order_count,
+   AVG(shipping_cost) AS Avg_shipping_cost
+FROM
+   KMS_Sql
+GROUP BY
+   order_priority, ship_mode
+ORDER BY
+   order_priority, ship_mode DESC;
+```
+#### Result and Insight
+Based on the analysis, the company spent shipping cost based on a combination of order priority and shipping mode which aligns with customer expectations and delivery commitments.
+
+### Recommendation
+Following the analysis of sales and customer behaviour data, the company can increase revenue by:
+- Highlighting best selling products in-store and advertisement. Also seasonal promotions around peak buying seasons.
+- Create furniture and office supplies packages with little disvount to encourage customers to buy more inorder to increase average order value
+- Customers with low purchasing power and frequency should be given personalized offers like installmental payment
+- Ensure fast, reliable and affordable delivery.
+- Improve Customer care service and use customers feedback expecially during return to refine designs and improve durability of products.
+   
 
 
 
