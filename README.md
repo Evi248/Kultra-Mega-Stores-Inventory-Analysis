@@ -144,7 +144,53 @@ To increae revenue frome thes customers, the following can be done:
 - Improvement of customer relationship management
 - Cross-sell and upsell to recommend complementary products or suggest higher value alternative 
 
-#### Question 5
+### Question 5
+``` sql
+---Q5 The company incurred the most shipping cost using which shipping method
+SELECT
+   [Ship_mode],
+   SUM([Shipping_cost]) as total_shipping_cost
+FROM
+   KMS_SQL
+GROUP BY
+   [Ship_mode]
+ORDER BY
+   total_shipping_cost DESC;
+```
+#### Result
+| Shp_mode          | Total_shiping_cost |
+| ---------------- | ----------- | 
+| Delivery Truck   | 51971.940
+| Regular Air      | 48008.190
+| Express Air      | 7850.910
+#### Insight
+The company incured the most shipping cost using the Delivery Truck. The company can focus more on other route of delivery to reduce cost.
+
+### Questin 6
+``` sql
+---Q6 Who are the most valuable customers and what product or service do they typically purchase?
+SELECT 
+   [customer_name],
+   [product_category],
+   COUNT(*) as purchase_count,
+   SUM(sales) as total_spent
+FROM
+   KMS_SQL
+WHERE
+   [customer_name] IN (
+      SELECT TOP 2 [customer_name]
+	  FROM KMS_SQL
+	  GROUP BY [customer_name]
+	  ORDER BY SUM(sales) DESC
+	)
+GROUP BY
+   [customer_name], [product_category]
+ORDER BY
+   [customer_name], Total_spent DESC;
+```
+#### Result
+
+
 
 
 
